@@ -40,8 +40,8 @@ def hello_world():
 
 @app.route('/create_room')
 def create_room():
-    username = request.args.get('username')
-    room_name = request.args.get('room_name')
+    username = request.args.get('userName')
+    room_name = request.args.get('roomName')
     password = request.args.get('password')
 
     rooms = list(db.collection('rooms').where('roomName', '==', room_name).stream())
@@ -51,7 +51,7 @@ def create_room():
             'error_msg': f'Room with name {room_name} already exists'
         }
     
-    _, room = db.collection('rooms').add({'userName': username, 'roomName': room_name, 'password': password})
+    _, room = db.collection('rooms').add({'userName': userName, 'roomName': roomName, 'password': password})
     return {
         'response_type': ResponseType.SUCCESS,
         'room_id': room.id
@@ -60,8 +60,8 @@ def create_room():
 
 @app.route('/join_room/')
 def join_room():
-    username = request.args.get('username')
-    room_name = request.args.get('room_name')
+    username = request.args.get('userName')
+    room_name = request.args.get('roomName')
     password = request.args.get('password')
 
     rooms = list(db.collection('rooms').where('roomName', '==', room_name).stream())
