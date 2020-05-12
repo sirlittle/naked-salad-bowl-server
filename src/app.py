@@ -24,7 +24,7 @@ db = firestore_db()
 
 def safe_call(func):
     '''
-    Makes sure the server always returns something even if it errors
+    Makes sure the server alwayse returns something even if it errors
     '''
     def fn_safe(*args, **kwargs):
         try:
@@ -51,36 +51,29 @@ def create_room():
             'error_msg': f'Room with name {room_name} already exists'
         }
     
-    _, room = db.collection('rooms').add({'userName': userName, 'roomName': roomName, 'password': password})
+    _, room = db.collection('rooms').add({'userName': username, 'roomName': room_name, 'password': password})
     return {
         'response_type': ResponseType.SUCCESS,
         'room_id': room.id
     }
     
 
-@app.route('/join_room/')
+@app.route('/join_room')
 def join_room():
     username = request.args.get('userName')
-    room_name = request.args.get('roomName')
+    room_id = request.args.get('roomId')
     password = request.args.get('password')
-
-    rooms = list(db.collection('rooms').where('roomName', '==', room_name).stream())
-    if len(rooms) == 0:
+    room = db.collection('rooms').document(room_id).get()
+    if not room.exists:
         return {
             'response_type': ResponseType.JOIN_ROOM_ERROR, 
-            'error_msg': f'no room named {room_name}'
+            'error_msg': f'no room named {room_id}'
         }
-    if len(rooms) > 1:
+    roomValues = room.to_dict()
+    if password != roomValues['password']:
         return {
             'response_type': ResponseType.JOIN_ROOM_ERROR, 
-            'error_msg': f'multiple rooms named {room_name} exist'
-        }
-
-    room_id, room = rooms[0].id, rooms[0].to_dict()
-    if password != room['password']:
-        return {
-            'response_type': ResponseType.JOIN_ROOM_ERROR, 
-            'error_msg': f'Incorrect Password for room {room_name}'
+            'error_msg': f'Incorrect Password for room {roomValues["roomName"]}'
         }
     return {
         'response_type': ResponseType.SUCCESS,
