@@ -6,3 +6,6 @@ Jinja2==2.11.2
 MarkupSafe==1.1.1
 psutil==5.6.6
 Werkzeug==1.0.1
+firebase-admin
+Flask-SocketIO
+functools

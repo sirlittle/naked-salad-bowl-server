@@ -1,0 +1,4 @@
+*.pyc
+
+canterbury_corp.egg-info
+nsb_server/server_credentials.json
