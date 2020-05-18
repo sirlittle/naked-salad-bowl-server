@@ -89,7 +89,7 @@ def create_room():
 @app.route('/join_room')
 def join_nsb_room():
     """
-    http://127.0.0.1:5000/join_room?roomName=Chris&password=123&userName=Salil
+    http://127.0.0.1:5000/join_room?roomName=tester&password=234&userName=randomUserName
 
     This function checks the roomName and password, and returns the room id if the roomName and password match
     """
