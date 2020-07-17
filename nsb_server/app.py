@@ -24,7 +24,7 @@ def get_game(room_id):
         room = room.to_dict()
 
         current_turn_guesses = [Guess(guess) for guess in room.pop('current_turn_guesses')]
-        bowl = NakedSaladBowl(room.pop('unguessed_cards'), room.pop('guessed_cards'), current_turn_guesses)
+        bowl = NakedSaladBowl(room.pop('unguessed_cards'), room.pop('guessed_cards'), current_turn_guesses, **room)
         return Game(room_id=room_id, bowl=bowl, **room)
     raise KeyError()
 
@@ -60,6 +60,7 @@ def hello_world():
 def add_user_to_room(room_doc_ref, username):
     user_doc = room_doc_ref.collection('users').document(username)
     user_doc.set({'userName': username, 'join_time': time.time()})
+    return user_doc
 
 
 @app.route('/create_room')
